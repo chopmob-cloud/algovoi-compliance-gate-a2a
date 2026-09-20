@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "algovoi-compliance-gate-a2a"
+version = "0.1.0"
+description = "Open, A2A-interoperable edition of the AlgoVoi Compliance Gate: a no-PII, geo-bound, seven-field Compliance Receipt mapped to A2A Payment Mandate and Cart Mandate primitives"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "Apache-2.0" }
+authors = [{ name = "AlgoVoi", email = "chopmob@gmail.com" }]
+keywords = ["a2a", "x402", "ap2", "compliance", "jcs", "rfc8785", "agentic-payments", "geo"]
+dependencies = ["rfc8785>=0.1.2"]
+
+[project.urls]
+Homepage = "https://api.algovoi.co.uk"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["algovoi_compliance_gate_a2a*"]

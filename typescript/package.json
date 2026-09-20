@@ -1,0 +1,16 @@
+{
+  "name": "@algovoi/compliance-gate-a2a",
+  "version": "0.1.0",
+  "description": "Open, A2A-interoperable edition of the AlgoVoi Compliance Gate: a no-PII, geo-bound, seven-field Compliance Receipt mapped to A2A Payment Mandate and Cart Mandate primitives",
+  "keywords": ["a2a", "x402", "ap2", "compliance", "jcs", "rfc8785", "agentic-payments", "geo"],
+  "license": "Apache-2.0",
+  "author": "AlgoVoi <chopmob@gmail.com>",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": { ".": { "import": "./dist/index.js", "types": "./dist/index.d.ts" } },
+  "files": ["dist/**/*"],
+  "scripts": { "build": "tsc" },
+  "dependencies": { "canonicalize": "^3.0.0" },
+  "devDependencies": { "typescript": "^5.4.0", "@types/node": "^20.0.0" }
+}
