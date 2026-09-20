@@ -21,7 +21,7 @@ canon_version, geo_ref, jurisdiction_flags, payer_ref,
 screen_provider_did, screen_result, screen_timestamp_ms
 ```
 
-Every reference is `"sha256:" + SHA-256(JCS(RFC 8785)(fields))` — the same
+Every reference is `"sha256:" + SHA-256(JCS(RFC 8785)(fields))`, the same
 canonicalization A2A already mandates for Agent Card signing (spec section 8.4.1), so
 the receipt shares A2A's existing byte discipline rather than introducing a new one.
 The distinctive field is `geo_ref`: a first-class, content-addressed geo determination
@@ -92,6 +92,32 @@ assert verify_receipt_ref(receipt, receipt_ref(receipt))
   never decides `ALLOW` / `REFER` / `DENY` for you (the one exception is
   `jurisdiction_decision`, which is geo-policy logic over a country you already resolved,
   not screening).
+
+## Wiring into a Keystone decision
+
+The receipt binds into a Keystone-style decision **by reference** and is never mutated.
+The `receipt_ref` is the `screen_ref`, and a decision layer binds to the screen that
+preceded it:
+
+```
+screen_ref         = receipt_ref(receipt)
+screen_binding_ref = "sha256:" + SHA-256(JCS({decision_ref, screen_ref}))
+```
+
+`screen_binding_ref` recomputes offline from the two references alone, so a verifier can
+prove a decision ran against *this* screen with no issuer contact (consistency, not
+correlation). Fold that reference into your decision audit next to its passport, mandate,
+and policy references; leaving it out is byte-identical to the no-compliance path (it is
+purely additive). A runnable end-to-end example is in
+[`examples/keystone_binding.py`](examples/keystone_binding.py):
+
+```bash
+PYTHONPATH=python python examples/keystone_binding.py
+```
+
+The commercial AlgoVoi Keystone additionally proves *which* decision standard drove the
+verdict and post-quantum signs the whole evidence chain; that layer is out of scope for
+this open edition, which supplies the receipt and the reference that binds it.
 
 ## License
 
