@@ -31,8 +31,12 @@ receipts (same `receiptRef`) on a clean box.
 
 ## Install
 
+This is published as source (Apache-2.0), not to npm. Clone and build:
+
 ```bash
-npm install @algovoi/compliance-gate-a2a
+git clone https://github.com/chopmob-cloud/algovoi-compliance-gate-a2a.git
+cd algovoi-compliance-gate-a2a/typescript
+npm install && npm run build
 ```
 
 ## Usage

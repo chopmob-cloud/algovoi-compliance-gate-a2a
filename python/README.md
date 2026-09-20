@@ -33,8 +33,17 @@ byte-identical receipts (same `receipt_ref`) on a clean box.
 
 ## Install
 
+This is published as source (Apache-2.0), not to PyPI. Install directly from the repo:
+
 ```bash
-pip install algovoi-compliance-gate-a2a
+pip install "git+https://github.com/chopmob-cloud/algovoi-compliance-gate-a2a.git#subdirectory=python"
+```
+
+Or clone and install locally:
+
+```bash
+git clone https://github.com/chopmob-cloud/algovoi-compliance-gate-a2a.git
+pip install ./algovoi-compliance-gate-a2a/python
 ```
 
 ## Usage
