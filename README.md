@@ -1,4 +1,4 @@
-# algovoi-compliance-gate-a2a
+# Algovoi-compliance-gate-a2a
 
 The open, A2A-interoperable edition of the AlgoVoi **Compliance Gate**: a no-PII,
 geo-bound, **seven-field Compliance Receipt** mapped to the A2A Payment Mandate and
