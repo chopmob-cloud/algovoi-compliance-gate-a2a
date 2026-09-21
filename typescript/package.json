@@ -8,7 +8,10 @@
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "exports": { ".": { "import": "./dist/index.js", "types": "./dist/index.d.ts" } },
+  "exports": {
+    ".": { "import": "./dist/index.js", "types": "./dist/index.d.ts" },
+    "./x402-rail": { "import": "./dist/x402Rail.js", "types": "./dist/x402Rail.d.ts" }
+  },
   "files": ["dist/**/*"],
   "scripts": { "build": "tsc" },
   "dependencies": { "canonicalize": "^3.0.0" },

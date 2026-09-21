@@ -119,6 +119,60 @@ The commercial AlgoVoi Keystone additionally proves *which* decision standard dr
 verdict and post-quantum signs the whole evidence chain; that layer is out of scope for
 this open edition, which supplies the receipt and the reference that binds it.
 
+## The x402 payment-rail format (`x402_rail`)
+
+The same repo also ships the open **x402 pay-rail format and method** the AlgoVoi rail
+speaks at `pay.algovoi.co.uk`: how to construct a spec-correct, multi-lane **x402 v2 `402`
+challenge**, the **MPP `application/problem+json` (RFC 9457)** payment-required body, and the
+rail's **discovery** surfaces. Like the Compliance Receipt, it is the *format*, not the engine:
+it builds the advertised payment terms, holds no keys, signs nothing on-chain, and settles
+nothing. The operator supplies the payout address per lane.
+
+It captures four correctness lessons the rail learned in production, each a pure recomputable
+transform:
+
+1. **Per-lane native decimals.** USDC is not 6-decimal everywhere, Stellar USDC is 7-decimal.
+   The advertised `extra.decimals` must match the scale of `maxAmountRequired`, or a client
+   reads a 10x-wrong price. `native_amount` rescales and a guard proves they agree.
+2. **MPP over RFC 9457.** The MPP payment-required body is `application/problem+json`,
+   `status: 402`, with an `accepts` member.
+3. **Dash-clean output.** Advertised strings carry no em/en dashes; `assert_ascii_dashes_only`
+   rejects them.
+4. **Multi-lane, multi-face discovery.** One `accepts[]` entry per enabled lane; the discovery
+   entry names the faces (`x402` / `mpp` / `ap2` / `a2a`) a rail speaks.
+
+```python
+from algovoi_compliance_gate_a2a.x402_rail import (
+    build_accept, build_x402_challenge, build_mpp_problem, challenge_ref,
+)
+
+# 0.01 USDC, priced once in canonical 6-decimal microUSDC; each lane rescales.
+base = build_accept(network="eip155:8453", asset="0x8335...2913", pay_to="0xYOUR_PAYOUT",
+                    resource="https://pay.example/verify/receipt", price_micro=10000,
+                    decimals=6, scheme_kind="eip3009-exact",
+                    description="pay 0.01 USDC on Base")
+stellar = build_accept(network="stellar:pubnet", asset="USDC:GA5Z...", pay_to="GYOUR_PAYOUT",
+                       resource="https://pay.example/verify/receipt", price_micro=10000,
+                       decimals=7, scheme_kind="avm-note",   # 7-decimal -> amount 100000
+                       description="pay 0.01 USDC on Stellar")
+
+challenge = build_x402_challenge([base, stellar], error="Payment required")
+print(challenge_ref(challenge))              # "sha256:..." recomputable, byte-identical in Node
+```
+
+The Node build is byte-identical (`@algovoi/compliance-gate-a2a/x402-rail`,
+`buildAccept` / `buildX402Challenge` / `challengeRef`). A runnable example is in
+[`examples/x402_rail_402.py`](examples/x402_rail_402.py):
+
+```bash
+PYTHONPATH=python python examples/x402_rail_402.py
+```
+
+Byte-parity is pinned in [`tests/test_x402_rail_parity.py`](tests/test_x402_rail_parity.py)
+and [`tests/x402Rail.parity.mjs`](tests/x402Rail.parity.mjs) (a fixed Base + Stellar challenge
+must produce the same `challenge_ref` in both languages). This is the interoperability surface
+only; verification and on-chain settlement stay in the commercial rail and are out of scope here.
+
 ## License
 
 Apache-2.0. See [LICENSE](./LICENSE) and [NOTICE](./NOTICE).
