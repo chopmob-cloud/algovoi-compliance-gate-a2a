@@ -1,5 +1,8 @@
 # Algovoi-compliance-gate-a2a
 
+
+[![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](./LICENSE)
+
 The open, A2A-interoperable edition of the AlgoVoi **Compliance Gate**: a no-PII,
 geo-bound, **seven-field Compliance Receipt** mapped to the A2A Payment Mandate and
 Cart Mandate primitives. Apache-2.0.
